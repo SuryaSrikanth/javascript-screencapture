@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Screen Capture</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="./screencapture.js"></script>
+    <style>
+      body {
+        background-color: #eeeeee;
+      }
+      .form {
+        margin-top: 4%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+      .form > div {
+        width: 40%;
+        padding: 8px 8px 8px 8px;
+        margin-bottom: 2%;
+      }
+      .brand-logo {
+        margin-left: 6%;
+      }
+      video {
+        padding-top: 50px;
+        max-width: 80%;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper grey darken-3">
+        <a href="#" class="brand-logo">screencapture.js</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li>
+            <a href="https://github.com/SuryaSrikanth/" target="_blank"
+              >Github</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <h2>Options</h2>
+    </div>
+    <div class="container form">
+      <div class="input-field">
+        <select id="mouseopt">
+          <option value="always">Always</option>
+          <option value="motion">When in motion</option>
+          <option value="never">Never</option>
+        </select>
+        <label>Mouse Options</label>
+      </div>
+      <div>
+        <label>
+          <input type="checkbox" checked />
+          <span>Audio</span>
+        </label>
+      </div>
+      <div>
+        <label>
+          <input id="echoCancellation" checked type="checkbox" />
+          <span>Echo Cancellation</span>
+        </label>
+      </div>
+      <div>
+        <label>
+          <input type="checkbox" id="noiseCancellation" checked />
+          <span>Noise Cancellation</span>
+        </label>
+      </div>
+      <div>
+        Sample Rate:
+        <input type="number" id="sampleRate" value="44100" />
+      </div>
+    </div>
+
+    <div class="container videoelem">
+      <button id="startcap" class="btn black">Start Caputure</button>
+      <button id="stopcap" class="btn black">Stop Sharing</button><br />
+      <video id="videotag" autoplay></video>
+    </div>
+  </body>
+  <script>
+    let videoele = document.getElementById("videotag");
+    document.addEventListener("DOMContentLoaded", function () {
+      var elems = document.querySelectorAll("select");
+      var instances = M.FormSelect.init(elems);
+    });
+
+    document.getElementById("startcap").addEventListener("click", (event) => {
+      // event.preventDefault();
+      let idx = document.getElementById("mouseopt").selectedIndex;
+      let curopt = document.getElementById("mouseopt").options[idx].value;
+      let echo = document.getElementById("echoCancellation").checked;
+      let noise = document.getElementById("noiseCancellation").checked;
+      let sampler = document.getElementById("sampleRate").value;
+      let captureOptions = {
+        video: {
+          cursor: String(curopt),
+        },
+        audio: {
+          echoCancellation: echo,
+          noiseSuppression: noise,
+          sampleRate: sampler,
+        },
+      };
+      // console.log(echo);
+      // console.log(idx);
+      // console.log(String(curopt));
+      startCapture(captureOptions, videoele);
+    });
+
+    document.getElementById("stopcap").addEventListener("click", (event) => {
+      // event.preventDefault();
+      stopCapture(videoele);
+    });
+  </script>
+</html>
